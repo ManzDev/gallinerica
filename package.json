@@ -1,0 +1,22 @@
+{
+  "name": "gallinerica",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "rm -rf dist && vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "eslint": "^8.46.0",
+    "eslint-config-manzdev": "^0.0.2",
+    "gh-pages": "^5.0.0",
+    "stylelint": "^15.10.2",
+    "stylelint-config-manzdev": "^0.0.10",
+    "vite": "^4.4.5"
+  },
+  "keywords": [],
+  "license": "ISC"
+}

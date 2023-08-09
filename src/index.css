@@ -1,0 +1,8 @@
+:root {
+  --game-width: 825px;
+  --game-height: 640px;
+}
+
+body {
+  background: #223;
+}
