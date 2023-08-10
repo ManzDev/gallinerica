@@ -1,0 +1,5 @@
+#!/bin/bash
+
+INPUT=$1
+
+convert $INPUT -filter point -resize 300%x300% ${INPUT%.*}-sprite.png
