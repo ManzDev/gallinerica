@@ -25,6 +25,7 @@ class NumberList extends HTMLElement {
         display: flex;
         flex-direction: column;
         align-items: center;
+        transform: translateY(3px);
       }
 
       .item img {
@@ -32,11 +33,19 @@ class NumberList extends HTMLElement {
 
         width: var(--size);
         height: var(--size);
+        filter:
+          drop-shadow(0 0 0 #000)
+          drop-shadow(1px 0 0 #000)
+          drop-shadow(0 1px 0 #000)
+          drop-shadow(-1px 0 0 #000)
+          drop-shadow(0 -1px 0 #000)
+          drop-shadow(0 0 2px #000)
       }
 
       .item span {
-        font-family: EnterCommand;
+        font-family: EnterCommand, sans-serif;
         font-size: 2rem;
+        text-shadow: 0 0 2px #0008;
       }
     `;
   }
@@ -56,7 +65,8 @@ class NumberList extends HTMLElement {
     this.icons = getPermutation();
 
     const keys = Object.values(this.icons);
-    const icons = keys.map((icon, index) => /* html */`<div class="item">
+    const icons = keys.map((icon, index) => /* html */`
+    <div class="item">
       <img src="images/icons/${icon}.png">
       <span>${index}</span>
     </div>`);

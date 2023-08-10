@@ -16,9 +16,11 @@ class ChickenPool extends HTMLElement {
 
       .container {
         width: 100%;
-        height: 96px;
+        height: 150px;
         overflow-x: hidden;
         position: relative;
+        display: flex;
+        align-items: end;
       }
 
       chicken-npc {
@@ -31,14 +33,6 @@ class ChickenPool extends HTMLElement {
     this.render();
 
     setInterval(() => this.spawnChicken(), 2500);
-
-    /*
-    document.addEventListener("keydown", (ev) => {
-      if (ev.key === "C") {
-        this.spawnChicken();
-      }
-    });
-    */
   }
 
   getMainChicken() {

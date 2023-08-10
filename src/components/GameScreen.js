@@ -2,6 +2,8 @@ import "@/components/BeltMachine.js";
 import "@/components/HomeCabin.js";
 import "@/components/ChickenPool.js";
 import "@/components/NumberList.js";
+import "@/components/ChickenBoard.js";
+import "@/components/FlagSystem.js";
 
 class GameScreen extends HTMLElement {
   constructor() {
@@ -15,25 +17,34 @@ class GameScreen extends HTMLElement {
         --goal-container-height: 1fr;
         --pool-container-height: 100px;
         --belt-container-height: 96px;
+        --opts-container-height: 96px;
+
+        display: inline-block;
+        border: 2px solid #fff;
       }
 
       .container {
         width: var(--game-width);
         height: var(--game-height);
         background: transparent;
-        padding: 0 35px;
         box-sizing: border-box;
 
         display: grid;
-        grid-template-rows: var(--goal-container-height) var(--pool-container-height) var(--belt-container-height);
+        grid-template-rows: var(--goal-container-height) var(--pool-container-height) var(--belt-container-height) var(--opts-container-height);
       }
 
       .goal-container {
-        background: purple;
+        /* background: url("images/gallinerica-logo.png") no-repeat top center; */
+        display: grid;
+        grid-template-columns: 96px 1fr;
+      }
+
+      .chicken-board-container {
+        display: flex;
+        justify-content: end;
       }
 
       .pool-container {
-
         display: flex;
         align-items: end;
       }
@@ -60,6 +71,8 @@ class GameScreen extends HTMLElement {
 
     const numberList = this.shadowRoot.querySelector("number-list");
     const chickenPool = this.shadowRoot.querySelector("chicken-pool");
+    const chickenBoard = this.shadowRoot.querySelector("chicken-board");
+    const flagSystem = this.shadowRoot.querySelector("flag-system");
 
     client.on("message", (channel, tags, message, self) => {
       const username = tags.username;
@@ -81,7 +94,13 @@ class GameScreen extends HTMLElement {
 
         if (message == okNumber) {
           console.log("OK!!!!!!");
-          mainChicken.sanitize();
+          if (!mainChicken.isChickenified) {
+            if (chickenBoard.lastWinner === username) {
+              flagSystem.addChicken();
+            }
+            mainChicken.sanitize(username);
+            chickenBoard.addPoint(username);
+          }
         }
       }
     });
@@ -92,7 +111,10 @@ class GameScreen extends HTMLElement {
     <style>${GameScreen.styles}</style>
     <div class="container">
       <div class="goal-container">
-        <number-list></number-list>
+        <flag-system></flag-system>
+        <div class="chicken-board-container">
+          <chicken-board></chicken-board>
+        </div>
       </div>
       <div class="pool-container">
         <chicken-pool></chicken-pool>
@@ -103,6 +125,9 @@ class GameScreen extends HTMLElement {
         <belt-machine></belt-machine>
         <belt-machine></belt-machine>
         <home-cabin></home-cabin>
+      </div>
+      <div class="opts-container">
+        <number-list></number-list>
       </div>
     </div>`;
   }
