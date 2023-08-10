@@ -1,5 +1,9 @@
 {
   "extends": "eslint-config-manzdev",
   "rules": {
+    "max-lines": [
+      "error",
+      300
+    ]
   }
 }

@@ -13,39 +13,51 @@ class NumberList extends HTMLElement {
       }
 
       .container {
+        border-top: 4px solid #000;
         background: #fff;
-        height: 96px;
+        height: 100%;
         display: flex;
-        gap: 15px;
+        gap: 10px;
         justify-content: center;
         align-items: center;
+        padding-top: 5px;
+        box-sizing: border-box;
       }
 
       .item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        transform: translateY(3px);
+        justify-content: center;
+      }
+
+      .circle {
+        width: 58px;
+        height: 58px;
+        display: grid;
+        place-items: center;
       }
 
       .item img {
         --size: 48px;
 
+        image-rendering: crisp-edges;
         width: var(--size);
         height: var(--size);
+
         filter:
-          drop-shadow(0 0 0 #000)
-          drop-shadow(1px 0 0 #000)
-          drop-shadow(0 1px 0 #000)
-          drop-shadow(-1px 0 0 #000)
-          drop-shadow(0 -1px 0 #000)
-          drop-shadow(0 0 2px #000)
+          drop-shadow(0 0 0 #000a)
+          drop-shadow(1px 0 0 #000a)
+          drop-shadow(0 1px 0 #000a)
+          drop-shadow(-1px 0 0 #000a)
+          drop-shadow(0 -1px 0 #000a)
+          drop-shadow(0 0 2px #000a);
       }
 
       .item span {
         font-family: EnterCommand, sans-serif;
         font-size: 2rem;
-        text-shadow: 0 0 2px #0008;
+        text-shadow: 0 0 2px #0006;
       }
     `;
   }
@@ -67,7 +79,9 @@ class NumberList extends HTMLElement {
     const keys = Object.values(this.icons);
     const icons = keys.map((icon, index) => /* html */`
     <div class="item">
-      <img src="images/icons/${icon}.png">
+      <div class="circle">
+        <img src="images/icons-old/${icon}.png">
+      </div>
       <span>${index}</span>
     </div>`);
 

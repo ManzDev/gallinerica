@@ -21,19 +21,17 @@ class ChickenBoard extends HTMLElement {
   static get styles() {
     return /* css */`
       :host {
-
+        --color: #ffd700;
       }
 
       .container {
-        width: 230px;
+        width: 250px;
         height: 155px;
-        background: #111;
-        border: 2px solid gold;
         padding: 6px;
       }
 
       .box {
-        background: #261631;
+        background: #13122e;
       }
 
       .box:nth-child(2) {
@@ -44,13 +42,17 @@ class ChickenBoard extends HTMLElement {
         text-align: center;
       }
 
+      .streak {
+        --color: lime;
+      }
+
       .user {
         display: grid;
         grid-template-columns: 20px 1fr 35px;
         gap: 0 6px;
         font-family: EnterCommand, sans-serif;
         font-size: 28px;
-        color: #ffd700;
+        color: var(--color);
         padding: 3px;
       }
 
@@ -74,27 +76,30 @@ class ChickenBoard extends HTMLElement {
 
   addPoint(username) {
     this.lastWinner = username;
-    this.table[username] = (this.table[username] ?? 0) + 1;
+    this.table[username] = (this.table[username] || 0) + 1;
     this.render();
   }
 
   getLeaderBoard() {
     const entries = Object.entries(this.table);
     const usersList = entries.map(([username, points]) => ({ username, points }));
-    const leaderBoard = usersList.toSorted((a, b) => b.points - a.points);
+    const leaderBoard = usersList.sort((a, b) => b.points - a.points);
     return leaderBoard.slice(0, 5);
   }
 
   renderTable() {
     const leaderBoard = this.getLeaderBoard();
 
-    const html = leaderBoard.map(({ username, points }, index) => /* html */`
-    <div class="user">
-      <div class="avatar" style="--image: ${profileChicken[index]}"></div>
-      <div class="box">${username}</div>
-      <div class="box">${points}</div>
-    </div>
-    `);
+    const html = leaderBoard.map(({ username, points }, index) => {
+      const streakClass = this.lastWinner === username ? "streak" : "";
+
+      return /* html */`
+      <div class="user user-${username} ${streakClass}">
+        <div class="avatar" style="--image: ${profileChicken[index]}"></div>
+        <div class="box">${username}</div>
+        <div class="box">${points}</div>
+      </div>`;
+    });
 
     return html.join("");
   }

@@ -4,6 +4,7 @@ import "@/components/ChickenPool.js";
 import "@/components/NumberList.js";
 import "@/components/ChickenBoard.js";
 import "@/components/FlagSystem.js";
+import { setLevel, currentDifficulty } from "@/modules/constants.js";
 
 class GameScreen extends HTMLElement {
   constructor() {
@@ -17,7 +18,7 @@ class GameScreen extends HTMLElement {
         --goal-container-height: 1fr;
         --pool-container-height: 100px;
         --belt-container-height: 96px;
-        --opts-container-height: 96px;
+        --opts-container-height: 110px;
 
         display: inline-block;
         border: 2px solid #fff;
@@ -25,7 +26,7 @@ class GameScreen extends HTMLElement {
 
       .container {
         width: var(--game-width);
-        height: var(--game-height);
+        min-height: var(--game-height);
         background: transparent;
         box-sizing: border-box;
 
@@ -34,7 +35,9 @@ class GameScreen extends HTMLElement {
       }
 
       .goal-container {
-        /* background: url("images/gallinerica-logo.png") no-repeat top center; */
+        background:
+          var(--level) no-repeat top 210px center,
+          url("images/gallinerica-logo.png") no-repeat top 64px center;
         display: grid;
         grid-template-columns: 96px 1fr;
       }
@@ -56,9 +59,26 @@ class GameScreen extends HTMLElement {
     `;
   }
 
+  showLevel(level) {
+    this.style.setProperty("--level", `url("images/levels/${level}-x2.png")`);
+  }
+
   connectedCallback() {
     this.render();
     this.tmiManager();
+    this.showLevel(currentDifficulty);
+
+    const chickenPool = this.shadowRoot.querySelector("chicken-pool");
+
+    document.addEventListener("keydown", ({ key }) => {
+      console.log(key);
+      const isAllowed = /^1|2|3|4$/.test(key);
+      if (isAllowed && !chickenPool.isWaiting) {
+        setLevel(key);
+        this.showLevel(currentDifficulty);
+        chickenPool.resetAndWait(5000);
+      }
+    });
   }
 
   tmiManager() {
@@ -90,13 +110,15 @@ class GameScreen extends HTMLElement {
           okNumber = numberList.getNumber(mainType);
         }
 
-        console.log(`${username} escribió ${message} -> pollo main: ${mainType} numero correcto: ${okNumber}`);
+        // console.log(`${username} escribió ${message} -> pollo main: ${mainType} numero correcto: ${okNumber}`);
 
         if (message == okNumber) {
           console.log("OK!!!!!!");
           if (!mainChicken.isChickenified) {
             if (chickenBoard.lastWinner === username) {
               flagSystem.addChicken();
+            } else {
+              flagSystem.removeChickens();
             }
             mainChicken.sanitize(username);
             chickenBoard.addPoint(username);

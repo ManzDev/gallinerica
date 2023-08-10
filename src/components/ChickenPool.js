@@ -1,10 +1,12 @@
 import "@/components/ChickenNPC.js";
 import { ICONS } from "@/modules/icons.js";
+import { getLevels } from "@/modules/constants.js";
 
 class ChickenPool extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.isWaiting = false;
   }
 
   static get styles() {
@@ -31,14 +33,25 @@ class ChickenPool extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.startSpawnChicken();
+  }
 
-    setInterval(() => this.spawnChicken(), 2500);
+  startSpawnChicken() {
+    this.isWaiting = false;
+    this.timer = setInterval(() => this.spawnChicken(), getLevels().TIME_TO_SPAWN_NEW_CHECK);
   }
 
   getMainChicken() {
     const chickens = [...this.shadowRoot.querySelectorAll(".container > *")];
     const stopChicken = chickens.find(chicken => chicken.isMove === false);
     return stopChicken;
+  }
+
+  resetAndWait(time) {
+    this.isWaiting = true;
+    clearInterval(this.timer);
+    this.timer = null;
+    setTimeout(() => this.startSpawnChicken(), time);
   }
 
   spawnChicken() {

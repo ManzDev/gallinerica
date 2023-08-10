@@ -1,30 +1,38 @@
-import "@/components/ChickenNPC.js";
+import "@/components/ChickenPodium.js";
+
+const MAX_CHICKEN = 10;
 
 class FlagSystem extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.lastStreak = null;
   }
 
   static get styles() {
     return /* css */`
-      :host {
-
-      }
-
       .container {
         width: 100%;
         height: 100%;
         display: flex;
-        align-items: end;
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
       }
     `;
   }
 
   addChicken() {
-    const chicken = document.createElement("chicken-npc");
-    chicken.setAttribute("is-podium", "");
-    this.container.append(chicken);
+    const size = this.container.querySelectorAll("chicken-podium").length;
+    if (size < MAX_CHICKEN) {
+      const chicken = document.createElement("chicken-podium");
+      this.container.append(chicken);
+    }
+  }
+
+  removeChickens() {
+    const chickens = [...this.container.querySelectorAll("chicken-podium")];
+    chickens.forEach(chicken => chicken.remove());
   }
 
   connectedCallback() {

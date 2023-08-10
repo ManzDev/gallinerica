@@ -1,0 +1,5 @@
+#!/bin/bash
+
+INPUT=$1
+
+convert $INPUT -filter point -resize 200%x200% ${INPUT%.*}-x2.png

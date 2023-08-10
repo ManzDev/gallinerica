@@ -1,9 +1,4 @@
-const WAIT_TIME = 1500;
-
-const options = {
-  duration: 4000,
-  fill: "forwards"
-};
+import { getLevels } from "@/modules/constants.js";
 
 class ChickenNPC extends HTMLElement {
   constructor() {
@@ -74,6 +69,10 @@ class ChickenNPC extends HTMLElement {
 
   spawn() {
     const keyframes = [{ transform: "translateX(350%)" }];
+    const options = {
+      duration: getLevels().TIME_TO_TRANSLATE,
+      fill: "forwards"
+    };
     const animation = this.container.animate(keyframes, options);
 
     animation.finished.then(() => this.onStop());
@@ -85,6 +84,10 @@ class ChickenNPC extends HTMLElement {
       { transform: "translateX(350%)" },
       { transform: "translateX(800%)" }
     ];
+    const options = {
+      duration: getLevels().TIME_TO_TRANSLATE,
+      fill: "forwards"
+    };
     const animation = this.container.animate(keyframes, options);
 
     animation.finished.then(() => this.onExit());
@@ -92,7 +95,7 @@ class ChickenNPC extends HTMLElement {
 
   onStop() {
     this.isMove = false;
-    setTimeout(() => this.leave(), WAIT_TIME);
+    setTimeout(() => this.leave(), getLevels().TIME_TO_WAIT);
   }
 
   sanitize(username) {
@@ -107,7 +110,6 @@ class ChickenNPC extends HTMLElement {
     this.addName(username);
 
     const animation = this.container.animate(keyframes, 1000);
-
     animation.finished.then(() => this.restore());
   }
 
