@@ -35,10 +35,8 @@ class GameScreen extends HTMLElement {
       }
 
       .goal-container {
-        --level: none;
-
         background:
-          var(--level) no-repeat top 200px center,
+          var(--level, none) no-repeat top 200px center,
           url("images/gallinerica-logo.png") no-repeat top 32px center;
         display: grid;
         grid-template-columns: 96px 1fr;
