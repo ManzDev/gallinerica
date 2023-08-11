@@ -55,6 +55,10 @@ class ChickenPool extends HTMLElement {
   }
 
   spawnChicken() {
+    if (document.hidden) {
+      return;
+    }
+
     const chicken = document.createElement("chicken-npc");
 
     const n = Math.floor(Math.random() * ICONS.length);
