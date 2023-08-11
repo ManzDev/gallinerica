@@ -96,11 +96,11 @@ class GameScreen extends HTMLElement {
 
     client.on("message", (channel, tags, message, self) => {
       const username = tags.username;
-      const nickname = tags["display-name"];
+      // const nickname = tags["display-name"];
       const isNumber = /^[0-9]$/.test(message);
 
       if (isNumber) {
-        const number = Number(message);
+        // const number = Number(message);
 
         const mainChicken = chickenPool.getMainChicken();
         const mainType = mainChicken ? mainChicken.getType() : null;
@@ -109,8 +109,6 @@ class GameScreen extends HTMLElement {
         if (mainType) {
           okNumber = numberList.getNumber(mainType);
         }
-
-        // console.log(`${username} escribió ${message} -> pollo main: ${mainType} numero correcto: ${okNumber}`);
 
         if (message == okNumber) {
           console.log("OK!!!!!!");
