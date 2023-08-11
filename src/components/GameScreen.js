@@ -1,10 +1,10 @@
+import { setLevel, currentDifficulty } from "@/modules/constants.js";
 import "@/components/BeltMachine.js";
 import "@/components/HomeCabin.js";
 import "@/components/ChickenPool.js";
 import "@/components/NumberList.js";
 import "@/components/ChickenBoard.js";
 import "@/components/FlagSystem.js";
-import { setLevel, currentDifficulty } from "@/modules/constants.js";
 
 class GameScreen extends HTMLElement {
   constructor() {
@@ -35,9 +35,11 @@ class GameScreen extends HTMLElement {
       }
 
       .goal-container {
+        --level: none;
+
         background:
-          var(--level) no-repeat top 210px center,
-          url("images/gallinerica-logo.png") no-repeat top 64px center;
+          var(--level) no-repeat top 200px center,
+          url("images/gallinerica-logo.png") no-repeat top 32px center;
         display: grid;
         grid-template-columns: 96px 1fr;
       }
@@ -45,6 +47,59 @@ class GameScreen extends HTMLElement {
       .chicken-board-container {
         display: flex;
         justify-content: end;
+      }
+
+      .twitch {
+        font-family: EnterCommand, sans-serif;
+        font-size: 2rem;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        text-align: center;
+        position: relative;
+        left: -25px;
+        top: -25px;
+      }
+
+      .twitch span {
+        color: gold;
+      }
+
+      .twitch input {
+        margin-top: 5px;
+        padding: 4px;
+        border: 2px solid #fff;
+        color: #fff;
+        background: transparent;
+        z-index: 10;
+        font-family: EnterCommand, sans-serif;
+        font-size: 2rem;
+        color: gold;
+        max-width: 175px;
+        text-align: center;
+      }
+
+      .twitch button {
+        border: 0;
+        border-radius: 2px;
+        padding: 6px 0;
+        margin-top: 6px;
+        font-family: EnterCommand, sans-serif;
+        font-size: 2rem;
+        color: #eee;
+        background: linear-gradient(#0863a5, #1283d1);
+        box-shadow: 0 7px 0 #0b5a92,0 8px 3px #0000004d;
+        z-index: 15;
+        transition: all 0.15s;
+        cursor: pointer;
+      }
+
+      .twitch button:active {
+        color: #888;
+        background: linear-gradient(to bottom, #0006, #0008), linear-gradient(#0863a5, #1283d1);
+        transform: translateY(5px);
+        box-shadow: 0 2px 0 #0b5a92,0 3px 3px #0000004d;
       }
 
       .pool-container {
@@ -65,10 +120,16 @@ class GameScreen extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.tmiManager();
-    this.showLevel(currentDifficulty);
 
+    const button = this.shadowRoot.querySelector(".twitch button");
+    button.addEventListener("click", () => this.connectToTwitch());
+  }
+
+  startGame() {
+    this.showLevel(currentDifficulty);
     const chickenPool = this.shadowRoot.querySelector("chicken-pool");
+
+    chickenPool.startSpawnChicken();
 
     document.addEventListener("keydown", ({ key }) => {
       console.log(key);
@@ -81,27 +142,32 @@ class GameScreen extends HTMLElement {
     });
   }
 
-  tmiManager() {
+  connectToTwitch() {
+    const channel = this.shadowRoot.querySelector(".twitch input").value.trim().toLowerCase().replace("#", "");
+
+    if (!channel) return;
+
+    this.shadowRoot.querySelector(".twitch").remove();
+
     // eslint-disable-next-line
-    const client = new tmi.Client({
-      channels: ["manzdev"]
+    this.client = new tmi.Client({
+      channels: [channel]
     });
 
-    client.connect();
+    this.client.connect();
 
     const numberList = this.shadowRoot.querySelector("number-list");
     const chickenPool = this.shadowRoot.querySelector("chicken-pool");
     const chickenBoard = this.shadowRoot.querySelector("chicken-board");
     const flagSystem = this.shadowRoot.querySelector("flag-system");
 
-    client.on("message", (channel, tags, message, self) => {
+    this.startGame();
+
+    this.client.on("message", (channel, tags, message, self) => {
       const username = tags.username;
-      // const nickname = tags["display-name"];
       const isNumber = /^[0-9]$/.test(message);
 
       if (isNumber) {
-        // const number = Number(message);
-
         const mainChicken = chickenPool.getMainChicken();
         const mainType = mainChicken ? mainChicken.getType() : null;
 
@@ -111,7 +177,6 @@ class GameScreen extends HTMLElement {
         }
 
         if (message == okNumber) {
-          console.log("OK!!!!!!");
           if (!mainChicken.isChickenified) {
             if (chickenBoard.lastWinner === username) {
               flagSystem.addChicken();
@@ -133,6 +198,11 @@ class GameScreen extends HTMLElement {
       <div class="goal-container">
         <flag-system></flag-system>
         <div class="chicken-board-container">
+          <div class="twitch">
+            <span>Conectar al canal:</span>
+            <input type="text" placeholder="manzdev">
+            <button>Conectar</button>
+          </div>
           <chicken-board></chicken-board>
         </div>
       </div>

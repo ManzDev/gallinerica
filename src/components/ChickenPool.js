@@ -33,7 +33,7 @@ class ChickenPool extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.startSpawnChicken();
+    // this.startSpawnChicken();
   }
 
   startSpawnChicken() {
