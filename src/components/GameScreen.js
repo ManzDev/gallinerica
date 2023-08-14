@@ -1,4 +1,4 @@
-import { setLevel, currentDifficulty } from "@/modules/constants.js";
+import { setLevel, currentDifficulty } from "@/modules/difficulty.js";
 import "@/components/BeltMachine.js";
 import "@/components/HomeCabin.js";
 import "@/components/ChickenPool.js";

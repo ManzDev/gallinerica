@@ -1,4 +1,4 @@
-import { getLevels } from "@/modules/constants.js";
+import { getLevels } from "@/modules/difficulty.js";
 
 class ChickenNPC extends HTMLElement {
   constructor() {

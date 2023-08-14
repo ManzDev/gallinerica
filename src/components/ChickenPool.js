@@ -1,6 +1,6 @@
 import "@/components/ChickenNPC.js";
 import { ICONS } from "@/modules/icons.js";
-import { getLevels } from "@/modules/constants.js";
+import { getLevels } from "@/modules/difficulty.js";
 
 class ChickenPool extends HTMLElement {
   constructor() {
