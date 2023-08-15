@@ -90,6 +90,7 @@ class NumberList extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    document.addEventListener("RANDOMIZE_NUMBER", () => this.render());
   }
 
   render() {

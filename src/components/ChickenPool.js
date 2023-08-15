@@ -1,4 +1,5 @@
 import "@/components/ChickenNPC.js";
+import "@/components/StopPlatform.js";
 import { ICONS } from "@/modules/icons.js";
 import { getLevels } from "@/modules/difficulty.js";
 
@@ -18,12 +19,19 @@ class ChickenPool extends HTMLElement {
 
       .container {
         width: 100%;
-        height: 150px;
+        height: 200px;
         overflow-x: hidden;
         position: relative;
         display: flex;
         align-items: end;
       }
+
+      /*
+      stop-platform {
+        position: relative;
+        z-index: 10;
+      }
+      */
 
       chicken-npc {
         position: absolute;
@@ -72,6 +80,7 @@ class ChickenPool extends HTMLElement {
     this.shadowRoot.innerHTML = /* html */`
     <style>${ChickenPool.styles}</style>
     <div class="container">
+      <stop-platform></stop-platform>
     </div>`;
   }
 }

@@ -28,15 +28,21 @@ class ChickenNPC extends HTMLElement {
       :host(.magic) { --image: url("images/magic-sprite.png"); }
 
       .username {
+        width: 250px;
+        background: indigo;
+        transform: translateX(-100px);
+      }
+
+      .username-container {
         position: absolute;
-        top: -25px;
+        top: -50px;
+        padding: 10px 20px;
         color: #fff;
         z-index: 20;
         font-family: EnterCommand, sans-serif;
         font-size: 35px;
+        text-align: center;
         width: var(--width);
-        display: flex;
-        justify-content: center;
       }
 
       .container {
@@ -94,8 +100,19 @@ class ChickenNPC extends HTMLElement {
   }
 
   onStop() {
+    this.sendToggle("bm2");
     this.isMove = false;
-    setTimeout(() => this.leave(), getLevels().TIME_TO_WAIT);
+    setTimeout(() => this.onContinue(), getLevels().TIME_TO_WAIT);
+  }
+
+  onContinue() {
+    this.sendToggle("bm2");
+    this.leave();
+  }
+
+  sendToggle(name) {
+    const event = new CustomEvent("TOGGLE_MACHINE", { composed: true, bubbles: true, detail: { name } });
+    document.dispatchEvent(event);
   }
 
   sanitize(username) {
@@ -114,10 +131,13 @@ class ChickenNPC extends HTMLElement {
   }
 
   addName(username) {
+    const divContainer = document.createElement("div");
+    divContainer.classList.add("username-container");
     const div = document.createElement("div");
+    divContainer.append(div);
     div.textContent = username;
     div.classList.add("username");
-    this.container.prepend(div);
+    this.container.prepend(divContainer);
 
     const keyframes = [
       { transform: "translate(0, 0)", opacity: 1 },
@@ -129,7 +149,7 @@ class ChickenNPC extends HTMLElement {
       fill: "forwards"
     };
 
-    div.animate(keyframes, textOptions);
+    divContainer.animate(keyframes, textOptions);
   }
 
   restore() {
@@ -137,6 +157,9 @@ class ChickenNPC extends HTMLElement {
   }
 
   onExit() {
+    const isChickenify = this.classList.item(0) === null;
+    const event = new CustomEvent("CHICKEN_EXIT", { detail: { isChickenify }, composed: true, bubbles: true });
+    document.dispatchEvent(event);
     this.remove();
   }
 

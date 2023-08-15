@@ -75,8 +75,16 @@ class ChickenBoard extends HTMLElement {
   }
 
   addPoint(username) {
+    console.log(username, " ha acertado");
     this.lastWinner = username;
     this.table[username] = (this.table[username] || 0) + 1;
+    this.render();
+  }
+
+  subPoint(username) {
+    console.log(username, " ha fallado");
+    console.log(this.table);
+    this.table[username] = (this.table[username] || 0) - 1;
     this.render();
   }
 
@@ -90,16 +98,18 @@ class ChickenBoard extends HTMLElement {
   renderTable() {
     const leaderBoard = this.getLeaderBoard();
 
-    const html = leaderBoard.map(({ username, points }, index) => {
-      const streakClass = this.lastWinner === username ? "streak" : "";
+    const html = leaderBoard
+      // .filter(({ points }) => points > 0)
+      .map(({ username, points }, index) => {
+        const streakClass = this.lastWinner === username ? "streak" : "";
 
-      return /* html */`
+        return /* html */`
       <div class="user user-${username} ${streakClass}">
         <div class="avatar" style="--image: ${profileChicken[index]}"></div>
         <div class="box">${username}</div>
         <div class="box">${points}</div>
       </div>`;
-    });
+      });
 
     return html.join("");
   }

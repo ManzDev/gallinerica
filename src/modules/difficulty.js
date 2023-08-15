@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 export let currentDifficulty = "easy";
+let randomizeNumbersTimer = null;
 
 const DIFFICULTY = {
   easy: {
@@ -31,5 +32,21 @@ const LEVELS = {
   4: "extreme"
 };
 
-export const setLevel = (level) => (currentDifficulty = LEVELS[level]);
+export const setLevel = (level) => {
+  randomizeNumbersTimer = null;
+  currentDifficulty = LEVELS[level];
+  if ((currentDifficulty === "hard") || (currentDifficulty === "extreme")) {
+    enableRandomizeNumbers();
+  }
+  const event = new CustomEvent("CHANGE_DIFFICULTY", { composed: true, bubbles: true, detail: currentDifficulty });
+  document.dispatchEvent(event);
+};
+
+const enableRandomizeNumbers = () => {
+  randomizeNumbersTimer = setInterval(() => {
+    const event = new CustomEvent("RANDOMIZE_NUMBER", { composed: true, bubbles: true });
+    document.dispatchEvent(event);
+  }, 60000);
+};
+
 export const getLevels = () => DIFFICULTY[currentDifficulty];

@@ -1,3 +1,18 @@
+const SPEED = {
+  0: "0ms",
+  1: "800ms",
+  2: "600ms",
+  3: "400ms",
+  4: "200ms"
+};
+
+const LEVELS = {
+  easy: 1,
+  normal: 2,
+  hard: 3,
+  extreme: 4
+};
+
 class BeltMachine extends HTMLElement {
   constructor() {
     super();
@@ -9,7 +24,7 @@ class BeltMachine extends HTMLElement {
       :host {
         --width: 192px;
         --height: 96px;
-        --speed: 800ms;
+        --speed: 0ms;
       }
 
       .container {
@@ -31,11 +46,23 @@ class BeltMachine extends HTMLElement {
   }
 
   connectedCallback() {
+    this.name = this.getAttribute("name");
     this.render();
+    document.addEventListener("CHANGE_DIFFICULTY", (ev) => {
+      const value = Number(LEVELS[ev.detail]);
+      this.setSpeed(value);
+    });
+    document.addEventListener("TOGGLE_MACHINE", (ev) => this.toggle(ev.detail.name));
   }
 
-  toggle() {
-    this.toggleAttribute("stop");
+  toggle(name) {
+    if (name === this.name) {
+      this.toggleAttribute("stop");
+    }
+  }
+
+  setSpeed(value) {
+    this.style.setProperty("--speed", SPEED[value]);
   }
 
   render() {

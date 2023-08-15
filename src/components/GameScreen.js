@@ -1,9 +1,11 @@
 import { setLevel, currentDifficulty } from "@/modules/difficulty.js";
 import "@/components/BeltMachine.js";
+import "@/components/ChickenBackground.js";
 import "@/components/HomeCabin.js";
 import "@/components/ChickenPool.js";
 import "@/components/NumberList.js";
 import "@/components/ChickenBoard.js";
+import "@/components/ChickenCounter.js";
 import "@/components/FlagSystem.js";
 
 class GameScreen extends HTMLElement {
@@ -21,7 +23,7 @@ class GameScreen extends HTMLElement {
         --opts-container-height: 110px;
 
         display: inline-block;
-        border: 2px solid #fff;
+        /* border: 2px solid #fff; */
       }
 
       .container {
@@ -36,7 +38,7 @@ class GameScreen extends HTMLElement {
 
       .goal-container {
         background:
-          var(--level, none) no-repeat top 200px center,
+          var(--level, none) no-repeat top 172px center,
           url("images/gallinerica-logo.png") no-repeat top 32px center;
         display: grid;
         grid-template-columns: 96px 1fr;
@@ -56,8 +58,15 @@ class GameScreen extends HTMLElement {
         justify-content: end;
         text-align: center;
         position: relative;
+        height: 115px;
+        transform: translate(30px, 190px);
+        z-index: 15;
+        padding: 35px;
+        border-radius: 2px;
         left: -25px;
-        top: -25px;
+        top: -15px;
+        background: #000;
+        box-shadow: 5px 5px 0 #0004;
       }
 
       .twitch span {
@@ -105,6 +114,10 @@ class GameScreen extends HTMLElement {
         align-items: end;
       }
 
+      chicken-board {
+        transform: translateY(90px);
+      }
+
       .belt-container {
         display: flex;
         align-items: end;
@@ -124,6 +137,7 @@ class GameScreen extends HTMLElement {
   }
 
   startGame() {
+    setLevel(1);
     this.showLevel(currentDifficulty);
     const chickenPool = this.shadowRoot.querySelector("chicken-pool");
 
@@ -184,6 +198,11 @@ class GameScreen extends HTMLElement {
             mainChicken.sanitize(username);
             chickenBoard.addPoint(username);
           }
+        } else if (okNumber) {
+          // Punto de castigo
+          if (currentDifficulty !== "easy") {
+            chickenBoard.subPoint(username);
+          }
         }
       }
     });
@@ -193,14 +212,16 @@ class GameScreen extends HTMLElement {
     this.shadowRoot.innerHTML = /* html */`
     <style>${GameScreen.styles}</style>
     <div class="container">
+      <chicken-background></chicken-background>
       <div class="goal-container">
         <flag-system></flag-system>
         <div class="chicken-board-container">
           <div class="twitch">
             <span>Conectar al canal:</span>
-            <input type="text" placeholder="manzdev">
+            <input type="text" placeholder="manzdev" value="manzdev">
             <button>Conectar</button>
           </div>
+          <chicken-counter></chicken-counter>
           <chicken-board></chicken-board>
         </div>
       </div>
@@ -209,9 +230,9 @@ class GameScreen extends HTMLElement {
       </div>
       <div class="belt-container">
         <home-cabin></home-cabin>
-        <belt-machine></belt-machine>
-        <belt-machine></belt-machine>
-        <belt-machine></belt-machine>
+        <belt-machine name="bm1"></belt-machine>
+        <belt-machine name="bm2"></belt-machine>
+        <belt-machine name="bm3"></belt-machine>
         <home-cabin></home-cabin>
       </div>
       <div class="opts-container">
