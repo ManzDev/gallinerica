@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 export let currentDifficulty = "easy";
-let randomizeNumbersTimer = null;
+export let randomizeNumbersTimer = null;
 
 const DIFFICULTY = {
   easy: {
@@ -31,6 +31,8 @@ const LEVELS = {
   3: "hard",
   4: "extreme"
 };
+
+export const NUMBERS = Object.fromEntries(Object.entries(LEVELS).map(([id, level]) => [level, id]));
 
 export const setLevel = (level) => {
   randomizeNumbersTimer = null;

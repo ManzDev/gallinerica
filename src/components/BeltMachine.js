@@ -1,16 +1,11 @@
+import { NUMBERS } from "@/modules/difficulty.js";
+
 const SPEED = {
   0: "0ms",
   1: "800ms",
   2: "600ms",
   3: "400ms",
   4: "200ms"
-};
-
-const LEVELS = {
-  easy: 1,
-  normal: 2,
-  hard: 3,
-  extreme: 4
 };
 
 class BeltMachine extends HTMLElement {
@@ -49,7 +44,7 @@ class BeltMachine extends HTMLElement {
     this.name = this.getAttribute("name");
     this.render();
     document.addEventListener("CHANGE_DIFFICULTY", (ev) => {
-      const value = Number(LEVELS[ev.detail]);
+      const value = Number(NUMBERS[ev.detail]);
       this.setSpeed(value);
     });
     document.addEventListener("TOGGLE_MACHINE", (ev) => this.toggle(ev.detail.name));

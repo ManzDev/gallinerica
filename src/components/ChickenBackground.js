@@ -61,6 +61,9 @@ class ChickenBackground extends HTMLElement {
 
   connectedCallback() {
     this.render();
+  }
+
+  start() {
     setInterval(() => this.classList.toggle("night"), TIME_TO_CHANGE);
   }
 

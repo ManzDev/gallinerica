@@ -23,7 +23,6 @@ class GameScreen extends HTMLElement {
         --opts-container-height: 110px;
 
         display: inline-block;
-        /* border: 2px solid #fff; */
       }
 
       .container {
@@ -134,17 +133,23 @@ class GameScreen extends HTMLElement {
 
     const button = this.shadowRoot.querySelector(".twitch button");
     button.addEventListener("click", () => this.connectToTwitch());
+
+    const input = this.shadowRoot.querySelector(".twitch input");
+    input.addEventListener("keydown", (ev) => {
+      ev.key.toLowerCase() === "enter" && button.click();
+    });
   }
 
   startGame() {
     setLevel(1);
     this.showLevel(currentDifficulty);
     const chickenPool = this.shadowRoot.querySelector("chicken-pool");
+    const chickenBackground = this.shadowRoot.querySelector("chicken-background");
 
     chickenPool.startSpawnChicken();
+    chickenBackground.start();
 
     document.addEventListener("keydown", ({ key }) => {
-      console.log(key);
       const isAllowed = /^1|2|3|4$/.test(key);
       if (isAllowed && !chickenPool.isWaiting) {
         setLevel(key);
@@ -176,6 +181,7 @@ class GameScreen extends HTMLElement {
     this.startGame();
 
     this.client.on("message", (channel, tags, message, self) => {
+      const number = Number(message);
       const username = tags.username;
       const isNumber = /^[0-9]$/.test(message);
 
@@ -188,7 +194,7 @@ class GameScreen extends HTMLElement {
           okNumber = numberList.getNumber(mainType);
         }
 
-        if (message == okNumber) {
+        if (number === okNumber) {
           if (!mainChicken.isChickenified) {
             if (chickenBoard.lastWinner === username) {
               flagSystem.addChicken();
@@ -199,7 +205,6 @@ class GameScreen extends HTMLElement {
             chickenBoard.addPoint(username);
           }
         } else if (okNumber) {
-          // Punto de castigo
           if (currentDifficulty !== "easy") {
             chickenBoard.subPoint(username);
           }
@@ -218,7 +223,7 @@ class GameScreen extends HTMLElement {
         <div class="chicken-board-container">
           <div class="twitch">
             <span>Conectar al canal:</span>
-            <input type="text" placeholder="manzdev" value="manzdev">
+            <input type="text" placeholder="manzdev">
             <button>Conectar</button>
           </div>
           <chicken-counter></chicken-counter>
