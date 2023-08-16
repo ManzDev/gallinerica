@@ -1,0 +1,1 @@
+@font-face{font-family:EnterCommand;src:url(fonts/entercommand.woff2) format("woff2"),url(fonts/entercommand.woff) format("woff"),url(fonts/entercommand.ttf) format("truetype")}:root{--game-width: 768px;--game-height: 640px}body{background:#1f1b26}game-screen{display:block;width:var(--game-width);margin:auto}
