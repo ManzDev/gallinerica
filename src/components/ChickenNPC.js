@@ -6,6 +6,8 @@ class ChickenNPC extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.isChickenified = false;
     this.isMove = true;
+    this.animation = null;
+    this.sanitizeAnimation = null;
   }
 
   static get styles() {
@@ -79,9 +81,9 @@ class ChickenNPC extends HTMLElement {
       duration: getLevels().TIME_TO_TRANSLATE,
       fill: "forwards"
     };
-    const animation = this.container.animate(keyframes, options);
 
-    animation.finished.then(() => this.onStop());
+    this.animation = this.container.animate(keyframes, options);
+    this.animation.finished.then(() => this.onStop());
   }
 
   leave() {
@@ -94,9 +96,8 @@ class ChickenNPC extends HTMLElement {
       duration: getLevels().TIME_TO_TRANSLATE,
       fill: "forwards"
     };
-    const animation = this.container.animate(keyframes, options);
-
-    animation.finished.then(() => this.onExit());
+    this.animation = this.container.animate(keyframes, options);
+    this.animation.finished.then(() => this.onExit());
   }
 
   onStop() {
@@ -126,8 +127,8 @@ class ChickenNPC extends HTMLElement {
 
     this.addName(username);
 
-    const animation = this.container.animate(keyframes, 1000);
-    animation.finished.then(() => this.restore());
+    this.sanitizeAnimation = this.container.animate(keyframes, 1000);
+    this.sanitizeAnimation.finished.then(() => this.restore());
   }
 
   addName(username) {
@@ -166,6 +167,20 @@ class ChickenNPC extends HTMLElement {
   connectedCallback() {
     this.render();
     this.container = this.shadowRoot.querySelector(".container");
+    document.addEventListener("visibilitychange", (ev) => {
+      if (document.hidden) this.pause();
+      else this.unpause();
+    });
+  }
+
+  pause() {
+    this.animation && this.animation.playState === "running" && this.animation.pause();
+    this.sanitizeAnimation && this.sanitizeAnimation.playState === "running" && this.sanitizeAnimation.pause();
+  }
+
+  unpause() {
+    this.animation && this.animation.playState === "paused" && this.animation.play();
+    this.sanitizeAnimation && this.sanitizeAnimation.playState === "paused" && this.sanitizeAnimation.play();
   }
 
   render() {

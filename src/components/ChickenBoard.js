@@ -75,15 +75,12 @@ class ChickenBoard extends HTMLElement {
   }
 
   addPoint(username) {
-    console.log(username, " ha acertado");
     this.lastWinner = username;
     this.table[username] = (this.table[username] || 0) + 1;
     this.render();
   }
 
   subPoint(username) {
-    console.log(username, " ha fallado");
-    console.log(this.table);
     this.table[username] = (this.table[username] || 0) - 1;
     this.render();
   }

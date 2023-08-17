@@ -66,7 +66,6 @@ class ChickenCounter extends HTMLElement {
   }
 
   counterChicken(isChickenify) {
-    console.log({ isChickenify });
     if (isChickenify) { this.addChickenify(); } else { this.addDoomed(); }
     this.render();
   }
