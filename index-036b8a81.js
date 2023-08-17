@@ -1,4 +1,4 @@
-(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const n of document.querySelectorAll('link[rel="modulepreload"]'))i(n);new MutationObserver(n=>{for(const s of n)if(s.type==="childList")for(const r of s.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&i(r)}).observe(document,{childList:!0,subtree:!0});function t(n){const s={};return n.integrity&&(s.integrity=n.integrity),n.referrerPolicy&&(s.referrerPolicy=n.referrerPolicy),n.crossOrigin==="use-credentials"?s.credentials="include":n.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function i(n){if(n.ep)return;n.ep=!0;const s=t(n);fetch(n.href,s)}})();let a="easy";const _={easy:{TIME_TO_SPAWN_NEW_CHECK:6e3,TIME_TO_TRANSLATE:6e3,TIME_TO_WAIT:4e3},normal:{TIME_TO_SPAWN_NEW_CHECK:4e3,TIME_TO_TRANSLATE:5e3,TIME_TO_WAIT:2500},hard:{TIME_TO_SPAWN_NEW_CHECK:2500,TIME_TO_TRANSLATE:4e3,TIME_TO_WAIT:1500},extreme:{TIME_TO_SPAWN_NEW_CHECK:2e3,TIME_TO_TRANSLATE:3e3,TIME_TO_WAIT:1e3}},S={1:"easy",2:"normal",3:"hard",4:"extreme"},A=Object.fromEntries(Object.entries(S).map(([o,e])=>[e,o])),M=o=>{a=S[o],(a==="hard"||a==="extreme")&&z();const e=new CustomEvent("CHANGE_DIFFICULTY",{composed:!0,bubbles:!0,detail:a});document.dispatchEvent(e)},z=()=>{setInterval(()=>{const o=new CustomEvent("RANDOMIZE_NUMBER",{composed:!0,bubbles:!0});document.dispatchEvent(o)},6e4)},l=()=>_[a],R={0:"0ms",1:"800ms",2:"600ms",3:"400ms",4:"200ms"};class m extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"})}static get styles(){return`
+(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const i of document.querySelectorAll('link[rel="modulepreload"]'))n(i);new MutationObserver(i=>{for(const s of i)if(s.type==="childList")for(const r of s.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&n(r)}).observe(document,{childList:!0,subtree:!0});function t(i){const s={};return i.integrity&&(s.integrity=i.integrity),i.referrerPolicy&&(s.referrerPolicy=i.referrerPolicy),i.crossOrigin==="use-credentials"?s.credentials="include":i.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function n(i){if(i.ep)return;i.ep=!0;const s=t(i);fetch(i.href,s)}})();let o="easy";const I={easy:{TIME_TO_SPAWN_NEW_CHECK:6e3,TIME_TO_TRANSLATE:6e3,TIME_TO_WAIT:4e3},normal:{TIME_TO_SPAWN_NEW_CHECK:4e3,TIME_TO_TRANSLATE:5e3,TIME_TO_WAIT:2500},hard:{TIME_TO_SPAWN_NEW_CHECK:2500,TIME_TO_TRANSLATE:4e3,TIME_TO_WAIT:1500},extreme:{TIME_TO_SPAWN_NEW_CHECK:2e3,TIME_TO_TRANSLATE:3e3,TIME_TO_WAIT:1e3}},S={1:"easy",2:"normal",3:"hard",4:"extreme"},N=Object.fromEntries(Object.entries(S).map(([a,e])=>[e,a])),M=a=>{o=S[a],(o==="hard"||o==="extreme")&&_();const e=new CustomEvent("CHANGE_DIFFICULTY",{composed:!0,bubbles:!0,detail:o});document.dispatchEvent(e)},_=()=>{setInterval(()=>{const a=new CustomEvent("RANDOMIZE_NUMBER",{composed:!0,bubbles:!0});document.dispatchEvent(a)},6e4)},l=()=>I[o],R={0:"0ms",1:"800ms",2:"600ms",3:"400ms",4:"200ms"};class m extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"})}static get styles(){return`
       :host {
         --width: 192px;
         --height: 96px;
@@ -20,7 +20,7 @@
       :host([stop]) .container {
         animation-play-state: paused;
       }
-    `}connectedCallback(){this.name=this.getAttribute("name"),this.render(),document.addEventListener("CHANGE_DIFFICULTY",e=>{const t=Number(A[e.detail]);this.setSpeed(t)}),document.addEventListener("TOGGLE_MACHINE",e=>this.toggle(e.detail.name))}toggle(e){e===this.name&&this.toggleAttribute("stop")}setSpeed(e){this.style.setProperty("--speed",R[e])}render(){this.shadowRoot.innerHTML=`
+    `}connectedCallback(){this.name=this.getAttribute("name"),this.render(),document.addEventListener("CHANGE_DIFFICULTY",e=>{const t=Number(N[e.detail]);this.setSpeed(t)}),document.addEventListener("TOGGLE_MACHINE",e=>this.toggle(e.detail.name))}toggle(e){e===this.name&&this.toggleAttribute("stop")}setSpeed(e){this.style.setProperty("--speed",R[e])}render(){this.shadowRoot.innerHTML=`
     <style>${m.styles}</style>
     <div class="container">
 
@@ -95,7 +95,7 @@
     `}connectedCallback(){this.render()}render(){this.shadowRoot.innerHTML=`
     <style>${g.styles}</style>
     <div class="container">
-    </div>`}}customElements.define("home-cabin",g);class f extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"}),this.isChickenified=!1,this.isMove=!0}static get styles(){return`
+    </div>`}}customElements.define("home-cabin",g);class f extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"}),this.isChickenified=!1,this.isMove=!0,this.animation=null,this.sanitizeAnimation=null}static get styles(){return`
       :host {
         --image: url("images/chicken-sprite.png");
         --width: 96px;
@@ -152,7 +152,7 @@
         0% { background-position: 0; }
         100% { background-position: -384px; }
       }
-    `}getType(){return this.classList.item(0)}spawn(){const e=[{transform:"translateX(350%)"}],t={duration:l().TIME_TO_TRANSLATE,fill:"forwards"};this.container.animate(e,t).finished.then(()=>this.onStop())}leave(){this.isMove=!0;const e=[{transform:"translateX(350%)"},{transform:"translateX(800%)"}],t={duration:l().TIME_TO_TRANSLATE,fill:"forwards"};this.container.animate(e,t).finished.then(()=>this.onExit())}onStop(){this.sendToggle("bm2"),this.isMove=!1,setTimeout(()=>this.onContinue(),l().TIME_TO_WAIT)}onContinue(){this.sendToggle("bm2"),this.leave()}sendToggle(e){const t=new CustomEvent("TOGGLE_MACHINE",{composed:!0,bubbles:!0,detail:{name:e}});document.dispatchEvent(t)}sanitize(e){this.isChickenified=!0;const t=[{filter:"brightness(0) invert(1) drop-shadow(0 0 0 gold)"},{filter:"brightness(0) invert(1) drop-shadow(0 0 10px gold)"},{filter:"brightness(0) invert(1) drop-shadow(0 0 0 gold)"}];this.addName(e),this.container.animate(t,1e3).finished.then(()=>this.restore())}addName(e){const t=document.createElement("div");t.classList.add("username-container");const i=document.createElement("div");t.append(i),i.textContent=e,i.classList.add("username"),this.container.prepend(t);const n=[{transform:"translate(0, 0)",opacity:1},{transform:"translate(0, -25px)",opacity:0}],s={duration:1e3,delay:1e3,fill:"forwards"};t.animate(n,s)}restore(){this.classList.remove(this.getType())}onExit(){const e=this.classList.item(0)===null,t=new CustomEvent("CHICKEN_EXIT",{detail:{isChickenify:e},composed:!0,bubbles:!0});document.dispatchEvent(t),this.remove()}connectedCallback(){this.render(),this.container=this.shadowRoot.querySelector(".container")}render(){this.shadowRoot.innerHTML=`
+    `}getType(){return this.classList.item(0)}spawn(){const e=[{transform:"translateX(350%)"}],t={duration:l().TIME_TO_TRANSLATE,fill:"forwards"};this.animation=this.container.animate(e,t),this.animation.finished.then(()=>this.onStop())}leave(){this.isMove=!0;const e=[{transform:"translateX(350%)"},{transform:"translateX(800%)"}],t={duration:l().TIME_TO_TRANSLATE,fill:"forwards"};this.animation=this.container.animate(e,t),this.animation.finished.then(()=>this.onExit())}onStop(){this.sendToggle("bm2"),this.isMove=!1,setTimeout(()=>this.onContinue(),l().TIME_TO_WAIT)}onContinue(){this.sendToggle("bm2"),this.leave()}sendToggle(e){const t=new CustomEvent("TOGGLE_MACHINE",{composed:!0,bubbles:!0,detail:{name:e}});document.dispatchEvent(t)}sanitize(e){this.isChickenified=!0;const t=[{filter:"brightness(0) invert(1) drop-shadow(0 0 0 gold)"},{filter:"brightness(0) invert(1) drop-shadow(0 0 10px gold)"},{filter:"brightness(0) invert(1) drop-shadow(0 0 0 gold)"}];this.addName(e),this.sanitizeAnimation=this.container.animate(t,1e3),this.sanitizeAnimation.finished.then(()=>this.restore())}addName(e){const t=document.createElement("div");t.classList.add("username-container");const n=document.createElement("div");t.append(n),n.textContent=e,n.classList.add("username"),this.container.prepend(t);const i=[{transform:"translate(0, 0)",opacity:1},{transform:"translate(0, -25px)",opacity:0}],s={duration:1e3,delay:1e3,fill:"forwards"};t.animate(i,s)}restore(){this.classList.remove(this.getType())}onExit(){const e=this.classList.item(0)===null,t=new CustomEvent("CHICKEN_EXIT",{detail:{isChickenify:e},composed:!0,bubbles:!0});document.dispatchEvent(t),this.remove()}connectedCallback(){this.render(),this.container=this.shadowRoot.querySelector(".container"),document.addEventListener("visibilitychange",e=>{document.hidden?this.pause():this.unpause()})}pause(){this.animation&&this.animation.playState==="running"&&this.animation.pause(),this.sanitizeAnimation&&this.sanitizeAnimation.playState==="running"&&this.sanitizeAnimation.pause()}unpause(){this.animation&&this.animation.playState==="paused"&&this.animation.play(),this.sanitizeAnimation&&this.sanitizeAnimation.playState==="paused"&&this.sanitizeAnimation.play()}render(){this.shadowRoot.innerHTML=`
     <style>${f.styles}</style>
     <div class="container">
     </div>`}}customElements.define("chicken-npc",f);class v extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"})}static get styles(){return`
@@ -169,7 +169,7 @@
     `}connectedCallback(){this.render()}render(){this.shadowRoot.innerHTML=`
     <style>${v.styles}</style>
     <div class="container">
-    </div>`}}customElements.define("stop-platform",v);const O=o=>{let e=o.length,t,i;for(;e;)i=Math.floor(Math.random()*e--),t=o[e],o[e]=o[i],o[i]=t;return o},p=["beer","briefcase","crown","fire","ice","magic","package","radioactive","rocket","voltage"],$=()=>{const e=O(p).map((t,i)=>[i,t]);return Object.fromEntries(e)};class b extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"}),this.isWaiting=!1}static get styles(){return`
+    </div>`}}customElements.define("stop-platform",v);const O=a=>{let e=a.length,t,n;for(;e;)n=Math.floor(Math.random()*e--),t=a[e],a[e]=a[n],a[n]=t;return a},p=["beer","briefcase","crown","fire","ice","magic","package","radioactive","rocket","voltage"],$=()=>{const e=O(p).map((t,n)=>[n,t]);return Object.fromEntries(e)};class b extends HTMLElement{constructor(){super(),this.attachShadow({mode:"open"}),this.isWaiting=!1}static get styles(){return`
       :host {
         display: inline-block;
         width: 100%;
@@ -194,7 +194,7 @@
       chicken-npc {
         position: absolute;
       }
-    `}connectedCallback(){this.render()}startSpawnChicken(){this.isWaiting=!1,this.timer=setInterval(()=>this.spawnChicken(),l().TIME_TO_SPAWN_NEW_CHECK)}getMainChicken(){return[...this.shadowRoot.querySelectorAll(".container > *")].find(i=>i.isMove===!1)}resetAndWait(e){this.isWaiting=!0,clearInterval(this.timer),this.timer=null,setTimeout(()=>this.startSpawnChicken(),e)}spawnChicken(){if(document.hidden)return;const e=document.createElement("chicken-npc"),t=Math.floor(Math.random()*p.length);e.classList.add(p[t]),this.shadowRoot.querySelector(".container").append(e),e.spawn()}render(){this.shadowRoot.innerHTML=`
+    `}connectedCallback(){this.render()}startSpawnChicken(){this.isWaiting=!1,this.timer=setInterval(()=>this.spawnChicken(),l().TIME_TO_SPAWN_NEW_CHECK)}getMainChicken(){return[...this.shadowRoot.querySelectorAll(".container > *")].find(n=>n.isMove===!1)}resetAndWait(e){this.isWaiting=!0,clearInterval(this.timer),this.timer=null,setTimeout(()=>this.startSpawnChicken(),e)}spawnChicken(){if(document.hidden)return;const e=document.createElement("chicken-npc"),t=Math.floor(Math.random()*p.length);e.classList.add(p[t]),this.shadowRoot.querySelector(".container").append(e),e.spawn()}render(){this.shadowRoot.innerHTML=`
     <style>${b.styles}</style>
     <div class="container">
       <stop-platform></stop-platform>
@@ -250,12 +250,12 @@
         font-size: 2rem;
         text-shadow: 0 0 2px #0006;
       }
-    `}getNumber(e){return Object.values(this.icons).findIndex(n=>e===n)}getIcon(e){return this.icons[e]}renderIcons(){return this.icons=$(),Object.values(this.icons).map((i,n)=>`
+    `}getNumber(e){return Object.values(this.icons).findIndex(i=>e===i)}getIcon(e){return this.icons[e]}renderIcons(){return this.icons=$(),Object.values(this.icons).map((n,i)=>`
     <div class="item">
       <div class="circle">
-        <img src="images/icons-old/${i}.png">
+        <img src="images/icons-old/${n}.png">
       </div>
-      <span>${n}</span>
+      <span>${i}</span>
     </div>`).join("")}connectedCallback(){this.render(),document.addEventListener("RANDOMIZE_NUMBER",()=>this.render())}render(){this.shadowRoot.innerHTML=`
     <style>${x.styles}</style>
     <div class="container">
@@ -308,11 +308,11 @@
         0% { background-position: 0; }
         100% { background-position: -80px; }
       }
-    `}connectedCallback(){this.render()}addPoint(e){console.log(e," ha acertado"),this.lastWinner=e,this.table[e]=(this.table[e]||0)+1,this.render()}subPoint(e){console.log(e," ha fallado"),console.log(this.table),this.table[e]=(this.table[e]||0)-1,this.render()}getLeaderBoard(){return Object.entries(this.table).map(([n,s])=>({username:n,points:s})).sort((n,s)=>s.points-n.points).slice(0,5)}renderTable(){return this.getLeaderBoard().map(({username:i,points:n},s)=>{const r=this.lastWinner===i?"streak":"";return`
-      <div class="user user-${i} ${r}">
+    `}connectedCallback(){this.render()}addPoint(e){this.lastWinner=e,this.table[e]=(this.table[e]||0)+1,this.render()}subPoint(e){this.table[e]=(this.table[e]||0)-1,this.render()}getLeaderBoard(){return Object.entries(this.table).map(([i,s])=>({username:i,points:s})).sort((i,s)=>s.points-i.points).slice(0,5)}renderTable(){return this.getLeaderBoard().map(({username:n,points:i},s)=>{const r=this.lastWinner===n?"streak":"";return`
+      <div class="user user-${n} ${r}">
         <div class="avatar" style="--image: ${W[s]}"></div>
-        <div class="box">${i}</div>
         <div class="box">${n}</div>
+        <div class="box">${i}</div>
       </div>`}).join("")}render(){this.shadowRoot.innerHTML=`
     <style>${y.styles}</style>
     <div class="container">
@@ -365,7 +365,7 @@
       .user:nth-child(2) .avatar {
         scale: 1 -1;
       }
-    `}connectedCallback(){this.render(),document.addEventListener("CHICKEN_EXIT",e=>this.counterChicken(e.detail.isChickenify))}counterChicken(e){console.log({isChickenify:e}),e?this.addChickenify():this.addDoomed(),this.render()}renderTable(){return`
+    `}connectedCallback(){this.render(),document.addEventListener("CHICKEN_EXIT",e=>this.counterChicken(e.detail.isChickenify))}counterChicken(e){e?this.addChickenify():this.addDoomed(),this.render()}renderTable(){return`
       <div class="user">
         <div class="avatar" style="--image: url(images/chicken.png)"></div>
         <div class="box">Gallinificados</div>
@@ -517,7 +517,7 @@
         display: flex;
         align-items: end;
       }
-    `}showLevel(e){this.style.setProperty("--level",`url("images/levels/${e}-x2.png")`)}connectedCallback(){this.render();const e=this.shadowRoot.querySelector(".twitch button");e.addEventListener("click",()=>this.connectToTwitch()),this.shadowRoot.querySelector(".twitch input").addEventListener("keydown",i=>{i.key.toLowerCase()==="enter"&&e.click()})}startGame(){M(1),this.showLevel(a);const e=this.shadowRoot.querySelector("chicken-pool"),t=this.shadowRoot.querySelector("chicken-background");e.startSpawnChicken(),t.start(),document.addEventListener("keydown",({key:i})=>{/^1|2|3|4$/.test(i)&&!e.isWaiting&&(M(i),this.showLevel(a),e.resetAndWait(5e3))})}connectToTwitch(){const e=this.shadowRoot.querySelector(".twitch input").value.trim().toLowerCase().replace("#","");if(!e)return;this.shadowRoot.querySelector(".twitch").remove(),this.client=new tmi.Client({channels:[e]}),this.client.connect();const t=this.shadowRoot.querySelector("number-list"),i=this.shadowRoot.querySelector("chicken-pool"),n=this.shadowRoot.querySelector("chicken-board"),s=this.shadowRoot.querySelector("flag-system");this.startGame(),this.client.on("message",(r,I,C,q)=>{const N=Number(C),c=I.username;if(/^[0-9]$/.test(C)){const d=i.getMainChicken(),L=d?d.getType():null;let h=null;L&&(h=t.getNumber(L)),N===h?d.isChickenified||(n.lastWinner===c?s.addChicken():s.removeChickens(),d.sanitize(c),n.addPoint(c)):h&&a!=="easy"&&n.subPoint(c)}})}render(){this.shadowRoot.innerHTML=`
+    `}showLevel(e){this.style.setProperty("--level",`url("images/levels/${e}-x2.png")`)}connectedCallback(){this.render();const e=this.shadowRoot.querySelector(".twitch button");e.addEventListener("click",()=>this.connectToTwitch()),this.shadowRoot.querySelector(".twitch input").addEventListener("keydown",n=>{n.key.toLowerCase()==="enter"&&e.click()})}startGame(){M(1),this.showLevel(o);const e=this.shadowRoot.querySelector("chicken-pool"),t=this.shadowRoot.querySelector("chicken-background");e.startSpawnChicken(),t.start(),document.addEventListener("keydown",({key:n})=>{/^1|2|3|4$/.test(n)&&!e.isWaiting&&(M(n),this.showLevel(o),e.resetAndWait(5e3))})}connectToTwitch(){const e=this.shadowRoot.querySelector(".twitch input").value.trim().toLowerCase().replace("#","");if(!e)return;this.shadowRoot.querySelector(".twitch").remove(),this.client=new tmi.Client({channels:[e]}),this.client.connect();const t=this.shadowRoot.querySelector("number-list"),n=this.shadowRoot.querySelector("chicken-pool"),i=this.shadowRoot.querySelector("chicken-board"),s=this.shadowRoot.querySelector("flag-system");this.startGame(),this.client.on("message",(r,A,C,q)=>{const z=Number(C),c=A.username;if(/^[0-9]$/.test(C)){const d=n.getMainChicken(),L=d?d.getType():null;let h=null;L&&(h=t.getNumber(L)),z===h?d.isChickenified||(i.lastWinner===c?s.addChicken():s.removeChickens(),d.sanitize(c),i.addPoint(c)):h&&o!=="easy"&&i.subPoint(c)}})}render(){this.shadowRoot.innerHTML=`
     <style>${T.styles}</style>
     <div class="container">
       <chicken-background></chicken-background>
