@@ -35,7 +35,6 @@ El juego se desarrolló durante 4 streams de Twitch, que de momento, puedes ver 
 
 ![Gallinérica: Día 1 de Desarrollo](sources/screenshot-day-1.png)
 
-- Twitch: https://www.twitch.tv/videos/1893475860
 - Youtube: https://youtu.be/B7NIXdiA35g
 
 ### Día 2: Mecánica principal
@@ -46,7 +45,6 @@ El juego se desarrolló durante 4 streams de Twitch, que de momento, puedes ver 
 
 ![Gallinérica: Día 2 de Desarrollo](sources/screenshot-day-2.png)
 
-- Twitch: https://www.twitch.tv/videos/1894348681
 - Youtube: https://youtu.be/CabQJ3sYkMQ
 
 ### Día 3: Perfeccionamiento del juego
@@ -56,7 +54,6 @@ El juego se desarrolló durante 4 streams de Twitch, que de momento, puedes ver 
 
 ![Gallinérica: Día 3 de Desarrollo](sources/screenshot-day-3.png)
 
-- Twitch: https://www.twitch.tv/videos/1895212835
 - Youtube: https://youtu.be/k6i65SCt838
 
 ### Día 4: Corrección de problemas y últimos detalles
@@ -69,7 +66,6 @@ El juego se desarrolló durante 4 streams de Twitch, que de momento, puedes ver 
 
 ![Gallinérica: Día 4 de Desarrollo](sources/screenshot-day-4.png)
 
-- Twitch: https://www.twitch.tv/videos/1899526814
 - Youtube: https://youtu.be/zWS61oeBVBM
 
 ## Estructura del juego
